@@ -21,19 +21,25 @@ async function run() {
         console.log("connected to db")
         // const topRatedCollection = database.collection('topRated');
         const coursesCollection = database.collection('courses');
+        const feedbacksCollection = database.collection('feedbacks');
         
         // get Top Rated course api
-        app.get('/top', async(req, res) => {
-            const cursor = topRatedCollection.find({})
-            const top = await cursor.toArray()
-            res.json(top)
-        })
-
-        // get Top Rated course api
+        // app.get('/top', async(req, res) => {
+        //     const cursor = topRatedCollection.find({})
+        //     const top = await cursor.toArray()
+        //     res.json(top)
+        // })
+        // get Courses api
         app.get('/courses', async(req, res) => {
             const cursor = coursesCollection.find({})
             const courses = await cursor.toArray()
             res.json(courses)
+        })
+        // get feedbacks api
+        app.get('/feedbacks', async(req,res)=>{
+            const cursor = feedbacksCollection.find({})
+            const feedbacks = await cursor.toArray() // carefully use await
+            res.json(feedbacks)
         })
 
     } finally {
