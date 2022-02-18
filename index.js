@@ -20,7 +20,6 @@ async function run() {
         await client.connect();
         const database = client.db('ideaSwap');
         console.log("connected to db")
-        // const topRatedCollection = database.collection('topRated');
         const coursesCollection = database.collection('courses');
         const feedbacksCollection = database.collection('feedbacks');
         const usersCollection = database.collection('users');
@@ -32,11 +31,19 @@ async function run() {
             const courses = await cursor.toArray()
             res.json(courses)
         })
+
         // get feedbacks api
         app.get('/feedbacks', async (req, res) => {
             const cursor = feedbacksCollection.find({})
             const feedbacks = await cursor.toArray() // carefully use await
             res.json(feedbacks)
+        })
+
+         // Feedback API 
+         app.post('/feedbacks', async (req, res) => {
+            const feeedback = req.body
+            const result = await feedbacksCollection.insertOne(feeedback)
+            res.json(result)
         })
 
         // Set users info in database
@@ -45,7 +52,9 @@ async function run() {
             const result = await usersCollection.insertOne(user)
             res.json(result)
         })
-        // 
+       
+
+        // Get single course details API
         app.get('/courses/:id', async (req, res) => {
             const id = req.params.id
             console.log('getting id', id)
