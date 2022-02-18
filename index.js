@@ -1,7 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const { MongoClient } = require("mongodb");
-const { append } = require('vary');
+var ObjectId = require('mongodb').ObjectId;
+// const { append } = require('vary');
 require('dotenv').config()
 
 const app = express()
@@ -22,14 +23,9 @@ async function run() {
         // const topRatedCollection = database.collection('topRated');
         const coursesCollection = database.collection('courses');
         const feedbacksCollection = database.collection('feedbacks');
-        const userCollection = database.collection('users');
+        const usersCollection = database.collection('users');
+        const reviewsCollection = database.collection('reviews');
 
-        // get Top Rated course api
-        // app.get('/top', async(req, res) => {
-        //     const cursor = topRatedCollection.find({})
-        //     const top = await cursor.toArray()
-        //     res.json(top)
-        // })
         // get Courses api
         app.get('/courses', async (req, res) => {
             const cursor = coursesCollection.find({})
@@ -43,11 +39,21 @@ async function run() {
             res.json(feedbacks)
         })
 
+        // Set users info in database
         app.post('/users', async (req, res) => {
             const user = req.body
-            const result = await userCollection.insertOne(user)
+            const result = await usersCollection.insertOne(user)
             res.json(result)
         })
+        // 
+        app.get('/courses/:id', async (req, res) => {
+            const id = req.params.id
+            console.log('getting id', id)
+            const query = { _id: ObjectId(id) }
+            const myCourse = await coursesCollection.findOne(query)
+            res.json(myCourse)
+        })
+
 
     } finally {
         //   await client.close();
