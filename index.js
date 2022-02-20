@@ -39,6 +39,13 @@ async function run() {
             res.json(feedbacks)
         })
 
+        // get users api
+        app.get('/users', async (req, res) => {
+            const cursor = usersCollection.find({})
+            const users = await cursor.toArray() // carefully use await
+            res.json(users)
+        })
+
          // Feedback API 
          app.post('/feedbacks', async (req, res) => {
             const feeedback = req.body
