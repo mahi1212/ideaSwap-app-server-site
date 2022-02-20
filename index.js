@@ -53,6 +53,15 @@ async function run() {
             res.json(result)
         })
 
+        // Delete feedback API
+        app.delete('/feedbacks/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await feedbacksCollection.deleteOne(query);
+            console.log('deleting feedback id ', result);
+            res.json(result);
+        })
+
         // Set users info in database
         app.post('/users', async (req, res) => {
             const user = req.body
@@ -60,7 +69,6 @@ async function run() {
             res.json(result)
         })
        
-
         // Get single course details API
         app.get('/courses/:id', async (req, res) => {
             const id = req.params.id
