@@ -53,11 +53,19 @@ async function run() {
             res.json(result)
         })
 
-        // Delete feedback API
+        // Delete FEEDBACKS API
         app.delete('/feedbacks/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await feedbacksCollection.deleteOne(query);
+            console.log('deleting feedback id ', result);
+            res.json(result);
+        })
+        // Delete USERS API
+        app.delete('/users/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await usersCollection.deleteOne(query);
             console.log('deleting feedback id ', result);
             res.json(result);
         })
