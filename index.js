@@ -46,13 +46,20 @@ async function run() {
             res.json(users)
         })
 
-         // Feedback API 
-         app.post('/feedbacks', async (req, res) => {
+        // Feedback API 
+        app.post('/feedbacks', async (req, res) => {
             const feeedback = req.body
             const result = await feedbacksCollection.insertOne(feeedback)
             res.json(result)
         })
-
+        
+        // post courses API 
+        app.post('/courses', async (req, res) => {
+            const courses = req.body
+            const result = await coursesCollection.insertOne(courses)
+            res.json(result)
+        })
+        
         // Delete FEEDBACKS API
         app.delete('/feedbacks/:id', async (req, res) => {
             const id = req.params.id;
