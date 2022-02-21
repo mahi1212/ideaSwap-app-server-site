@@ -77,6 +77,13 @@ async function run() {
             res.json(result);
         })
 
+        app.delete('/courses/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await coursesCollection.deleteOne(query);
+            res.json(result);
+        })
+
         // Set users info in database
         app.post('/users', async (req, res) => {
             const user = req.body
