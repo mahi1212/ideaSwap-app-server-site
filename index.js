@@ -52,14 +52,13 @@ async function run() {
             const result = await feedbacksCollection.insertOne(feeedback)
             res.json(result)
         })
-        
         // post courses API 
         app.post('/courses', async (req, res) => {
             const courses = req.body
             const result = await coursesCollection.insertOne(courses)
             res.json(result)
         })
-        
+
         // Delete FEEDBACKS API
         app.delete('/feedbacks/:id', async (req, res) => {
             const id = req.params.id;
@@ -76,7 +75,7 @@ async function run() {
             console.log('deleting feedback id ', result);
             res.json(result);
         })
-
+        // Delete COURSE API
         app.delete('/courses/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -90,7 +89,27 @@ async function run() {
             const result = await usersCollection.insertOne(user)
             res.json(result)
         })
-       
+        // Set Admin role in database
+        app.put('/users', async (req, res) => {
+            const user = req.body
+            console.log('put', user)
+            const filter ={email : user.email}
+            const updateDoc = {$set: {role: 'admin'}}
+            const result = await usersCollection.updateOne(filter, updateDoc)
+            res.json(result)
+        })
+        // Set Admin role in database
+        app.get('/users/:email', async (req, res) => {
+            const email = req.params.email
+            const query = {email: email}
+            const user = await usersCollection.findOne(query)
+            const isAdmin = false
+            if(user.role === 'admin'){
+                isAdmin = true
+            }
+            res.json({admin: isAdmin})
+        })
+
         // Get single course details API
         app.get('/courses/:id', async (req, res) => {
             const id = req.params.id
