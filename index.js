@@ -19,7 +19,6 @@ async function run() {
     try {
         await client.connect();
         const database = client.db('ideaSwap');
-        console.log("connected to db")
         const coursesCollection = database.collection('courses');
         const feedbacksCollection = database.collection('feedbacks');
         const usersCollection = database.collection('users');
