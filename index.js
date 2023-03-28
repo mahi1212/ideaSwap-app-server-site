@@ -4,6 +4,7 @@ const { MongoClient } = require("mongodb");
 var ObjectId = require('mongodb').ObjectId;
 // const { append } = require('vary');
 require('dotenv').config()
+const helmet = require('helmet');
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -11,6 +12,9 @@ const port = process.env.PORT || 5000
 // Middleware
 app.use(cors())
 app.use(express.json())
+app.use(helmet({
+    referrerPolicy: false
+}));
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.tecyb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -92,21 +96,21 @@ async function run() {
         app.put('/users', async (req, res) => {
             const user = req.body
             console.log('put', user)
-            const filter ={email : user.email}
-            const updateDoc = {$set: {role: 'admin'}}
+            const filter = { email: user.email }
+            const updateDoc = { $set: { role: 'admin' } }
             const result = await usersCollection.updateOne(filter, updateDoc)
             res.json(result)
         })
         // Set Admin role in database
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email
-            const query = {email: email}
+            const query = { email: email }
             const user = await usersCollection.findOne(query)
             let isAdmin = false
-            if(user?.role === 'admin'){
+            if (user?.role === 'admin') {
                 isAdmin = true
             }
-            res.json({admin: isAdmin})
+            res.json({ admin: isAdmin })
         })
 
         // Get single course details API
